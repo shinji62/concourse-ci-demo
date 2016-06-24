@@ -3,21 +3,26 @@ see https://github.com/esteinberg/plantuml4idea
 
 @startuml
 
-Human -> Pivotal_Tracker: (PM) create & refine Story
-Human -> Git: (Developer) implement story & commit to 'develop' branch( # pivotal_tracker story number)
-Human -> Pivotal_Tracker: (Developer) finish the story
-Concourse -> Git : commit detection by polling
-Concourse -> Build_Env: Trigger CI build (dev)
-Concourse -> Pivotal_Tracker: create 'accept' ticket if build successful.
-Human -> Build_Env: (QA) testing on 'develop' env.
-Human -> Pivotal_Tracker : (QA) accept if succesful or reject
-Human -> Git: (Developer) merge to 'staging' branch ( # pivotal_tracker story number)
-Concourse -> Git : commit detection by polling
-Concourse -> Build_Env: Trigger CI build (staging)
-Human -> Build_Env: (QA) testing on 'staging' env.
-Human -> Pivotal_Tracker : (QA/PM) accept and close the story if succesful or reject
-Human -> Git: (Developer) merge to 'production' and 'develop' branch ( # pivotal_tracker story number)
-Concourse -> Git : commit detection by polling
-Concourse -> Build_Env: Trigger CI build (production)
+Team -> Tracker: (PM) create & refine Feature
+Team -> Team: (PM/Dev) Iteration Planning Meeting estimate and start story current sprint
+Team -> Git: (Dev) Implement story in feature branch
+Team -> Git: (Dev) Commit to develop branch (Peer Review Process)
+Git -> Concourse : Trigger CI build //Development//, Run Unit Testing
+Concourse -> CloudFoundry: Deploy to Dev Space
+Concourse -> Tracker: Finish the story
+Team -> CloudFoundry: (PM) Validates the feature
+Team -> Tracker: (PM) Accepts Story
+Team -> Git: (Dev/PM) Prepare Release Candidate
+Git -> Concourse: Trigger CI Build //Staging//, create release candidate release branch
+Concourse -> CloudFoundry: Deploy to Staging Space
+Concourse -> Concourse: Run Integration Testing
+Team -> CloudFoundry: (Client/QA) Validates the feature
+Team -> Tracker: (QA) Open bug fixes if necessary, Marks the Feature ready for Release (Notes)
+Team -> Concourse: (Client) Trigger merge Release to Master branch
+Concourse -> Git: Tag Release and Bump version
+Git -> Concourse: Trigger CI build //Production//
+Concourse -> CloudFoundry: Blue Green Deployment to Production Space
+Team -> CloudFoundry: (Client) Validates the release, switch blue and green
+Team -> Tracker: (Client) Marks Release successful
 
 @enduml
