@@ -1,0 +1,23 @@
+this doc uses 'PlantUML integration'
+see https://github.com/esteinberg/plantuml4idea
+
+@startuml
+
+Human -> Pivotal_Tracker: (PM) create & refine Story
+Human -> Git: (Developer) implement story & commit to 'develop' branch( # pivotal_tracker story number)
+Human -> Pivotal_Tracker: (Developer) finish the story
+Concourse -> Git : commit detection by polling
+Concourse -> Build_Env: Trigger CI build (dev)
+Concourse -> Pivotal_Tracker: create 'accept' ticket if build successful.
+Human -> Build_Env: (QA) testing on 'develop' env.
+Human -> Pivotal_Tracker : (QA) accept if succesful or reject
+Human -> Git: (Developer) merge to 'staging' branch ( # pivotal_tracker story number)
+Concourse -> Git : commit detection by polling
+Concourse -> Build_Env: Trigger CI build (staging)
+Human -> Build_Env: (QA) testing on 'staging' env.
+Human -> Pivotal_Tracker : (QA/PM) accept and close the story if succesful or reject
+Human -> Git: (Developer) merge to 'production' and 'develop' branch ( # pivotal_tracker story number)
+Concourse -> Git : commit detection by polling
+Concourse -> Build_Env: Trigger CI build (production)
+
+@enduml
