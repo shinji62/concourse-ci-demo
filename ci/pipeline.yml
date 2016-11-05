@@ -8,59 +8,59 @@ resources:
   - name: repo-develop
     type: git
     source:
-      uri: git@github.com:making/concourse-ci-demo.git
+      uri: git@github.com:shinji62/cfdays-ci-demo.git
       branch: develop
-      private_key: {{github-private-key}}
+      private_key: {{private-key-github-concourse}}
     check_every: 10s # for demo
   - name: repo-release
     type: git
     source:
-      uri: git@github.com:making/concourse-ci-demo.git
+      uri: git@github.com:shinji62/cfdays-ci-demo.git
       branch: release
-      private_key: {{github-private-key}}
+      private_key: {{private-key-github-concourse}}
     check_every: 10s # for demo
   - name: repo-master
     type: git
     source:
-      uri: git@github.com:making/concourse-ci-demo.git
+      uri: git@github.com:shinji62/cfdays-ci-demo.git
       branch: master
-      private_key: {{github-private-key}}
+      private_key: {{private-key-github-concourse}}
     check_every: 10s # for demo
   - name: version
     type: semver
     source:
-      uri: git@github.com:making/concourse-ci-demo.git
+      uri: git@github.com:shinji62/cfdays-ci-demo.git
       branch: version
-      private_key: {{github-private-key}}
+      private_key: {{private-key-github-concourse}}
       file: version
       driver: git
       initial_version: 0.5.0
   - name: cf-prod
     type: cf
     source:
-      api: {{cf-api}}
-      username: {{cf-username}}
-      password: {{cf-password}}
+      api: {{pws-api}}
+      username: {{pws-username}}
+      password: {{pws-password}}
       organization: {{cf-org}}
-      space: {{cf-space-prod}}
+      space: {{pws-space-prod}}
       skip_cert_check: true
   - name: cf-staging
     type: cf
     source:
-      api: {{cf-api}}
-      username: {{cf-username}}
-      password: {{cf-password}}
-      organization: {{cf-org}}
-      space: {{cf-space-staging}}
+      api: {{pws-api}}
+      username: {{pws-username}}
+      password: {{pws-password}}
+      organization: {{pws-org}}
+      space: {{pws-space-stg}}
       skip_cert_check: true
   - name: cf-dev
     type: cf
     source:
-      api: {{cf-api}}
-      username: {{cf-username}}
-      password: {{cf-password}}
-      organization: {{cf-org}}
-      space: {{cf-space-dev}}
+      api: {{pws-api}}
+      username: {{pws-username}}
+      password: {{pws-password}}
+      organization: {{pws-org}}
+      space: {{pws-space-dev}}
       skip_cert_check: true
   - name: m2
     type: docker-image
@@ -103,7 +103,7 @@ jobs:
         params:
           manifest: repo/manifest-dev.yml
           path: output/demo.jar
-          current_app_name: concourse-ci-demo-dev
+          current_app_name: cfdays-ci-demo-dev
 
   - name: test-release
     serial: true
@@ -133,7 +133,7 @@ jobs:
         params:
           manifest: repo/manifest-staging.yml
           path: output/demo.jar
-          current_app_name: concourse-ci-demo-staging
+          current_app_name: cfdays-ci-demo-staging
 
   - name: merge-release-to-master
     public: true
@@ -248,55 +248,4 @@ jobs:
         params:
           manifest: repo/manifest.yml
           path: output/demo.jar
-          current_app_name: concourse-ci-demo
-
-  # - name: init-m2
-  #   plan:
-  #     - get: repo
-  #       resource: repo-release
-  #     - task: build-m2
-  #       config:
-  #         platform: linux
-  #         image_resource:
-  #           type: docker-image
-  #           source:
-  #             repository: java
-  #             tag: 8-jdk-alpine
-  #         inputs:
-  #           - name: repo
-  #         outputs:
-  #           - name: to-push
-  #         run:
-  #           path: sh
-  #           args:
-  #           - repo/ci/tasks/m2.sh
-  #           - init
-  #     - put: m2
-  #       params:
-  #         import_file: to-push/rootfs.tar
-  #
-  # - name: update-m2
-  #   plan:
-  #     - get: repo
-  #       resource: repo-release
-  #     - get: m2
-  #     - task: build-m2
-  #       config:
-  #         platform: linux
-  #         image_resource:
-  #           type: docker-image
-  #           source:
-  #             repository: java
-  #             tag: 8-jdk-alpine
-  #         inputs:
-  #           - name: repo
-  #           - name: m2
-  #         outputs:
-  #           - name: to-push
-  #         run:
-  #           path: sh
-  #           args:
-  #           - repo/ci/tasks/m2.sh
-  #     - put: m2
-  #       params:
-  #         import_file: to-push/rootfs.tar
+          current_app_name: cfdays-ci-demo
