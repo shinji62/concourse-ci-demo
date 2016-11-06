@@ -1,6 +1,6 @@
 ---
 applications:
   - name: cfdays-ci-demo-dev
-    path:target/demo-0.39.0-SNAPSHOT.jar
+    path: target/demo-0.39.0-SNAPSHOT.jar
     buildpack: java_buildpack
     memory: 512m

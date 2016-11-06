@@ -8,28 +8,28 @@ resources:
   - name: repo-develop
     type: git
     source:
-      uri: git@github.com:shinji62/cfdays-ci-demo.git
+      uri: git@github.com:shinji62/concourse-ci-demo.git
       branch: develop
       private_key: {{private-key-github-concourse}}
     check_every: 10s # for demo
   - name: repo-release
     type: git
     source:
-      uri: git@github.com:shinji62/cfdays-ci-demo.git
+      uri: git@github.com:shinji62/concourse-ci-demo.git
       branch: release
       private_key: {{private-key-github-concourse}}
     check_every: 10s # for demo
   - name: repo-master
     type: git
     source:
-      uri: git@github.com:shinji62/cfdays-ci-demo.git
+      uri: git@github.com:shinji62/concourse-ci-demo.git
       branch: master
       private_key: {{private-key-github-concourse}}
     check_every: 10s # for demo
   - name: version
     type: semver
     source:
-      uri: git@github.com:shinji62/cfdays-ci-demo.git
+      uri: git@github.com:shinji62/concourse-ci-demo.git
       branch: version
       private_key: {{private-key-github-concourse}}
       file: version
@@ -41,7 +41,7 @@ resources:
       api: {{pws-api}}
       username: {{pws-username}}
       password: {{pws-password}}
-      organization: {{cf-org}}
+      organization: {{pws-org}}
       space: {{pws-space-prod}}
       skip_cert_check: true
   - name: cf-staging
